@@ -1,0 +1,27 @@
+{
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "name": "Fastapp Chrome Extension",
+    "action": {
+        "default_popup": "js/index.html",
+        "default_title": "React Chrome Extension"
+    },
+    "background": {
+        "service_worker": "js/background.js"
+    },
+    "permissions": [
+        "storage",
+        "activeTab",
+        "scripting",
+        "tabs"
+    ],
+    "content_scripts": [
+        {
+          "matches": ["<all_urls>"],
+          "js": ["js/content_script.js"]
+        }
+      ],
+      "host_permissions": [
+        "http://localhost:3000/"
+      ]
+}

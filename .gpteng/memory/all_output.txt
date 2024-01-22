@@ -1,0 +1,40 @@
+To run a script like `test.js` on any page using a Chrome Extension, you need to declare it as a content script in the extension's `manifest.json` file. Content scripts are JavaScript files that run in the context of web pages. By using the matches property, you can specify that the script should run on any page by using the `<all_urls>` match pattern.
+
+Here's how you would modify the `manifest.json` file to include `test.js` as a content script that runs on any page:
+
+manifest.json
+```json
+{
+  "manifest_version": 3,
+  "name": "Your Extension Name",
+  "version": "1.0",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["test.js"]
+    }
+  ],
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  }
+}
+```
+
+Please note that you need to replace `"Your Extension Name"` with the actual name of your extension and ensure that the paths to the icons and popup HTML are correct. The `manifest_version` is set to 3, which is the latest version at the time of writing this.
+
+The `content_scripts` section is where `test.js` is specified to run on any page. The `matches` property with the value `"<all_urls>"` tells Chrome to inject `test.js` into every page the user navigates to.
+
+Make sure that `test.js` is located in the correct directory as specified in the `manifest.json` file. If it's in a subdirectory, you need to include the path to the file, for example `"js": ["scripts/test.js"]`.
+
+This concludes the necessary changes to the `manifest.json` file to run `test.js` on any page as a content script in a Chrome Extension.
