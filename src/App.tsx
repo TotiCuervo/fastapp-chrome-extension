@@ -1,11 +1,15 @@
-import "../src/assets/tailwind.css";
+import '../src/assets/tailwind.css'
+import Providers from './providers'
+import Router from './router'
 
-function App() {
-  return (
-    <div className="w-full h-full text-xl bg-blue-500 text-red-500">
-      Hello World
-    </div>
-  );
+export default function App() {
+    return (
+        <html lang="en">
+            <body className="dark size-[600px]">
+                <Providers>
+                    <Router />
+                </Providers>
+            </body>
+        </html>
+    )
 }
-
-export default App;

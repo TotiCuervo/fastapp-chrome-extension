@@ -1,3 +1,0 @@
-You are working on a Chrome Extension built with React. You will not need to change the package.json or the package-lock.json.
-
-I have a script called test.js. Add the appropriate code in manifest.json so that tests.js runs on any page.
