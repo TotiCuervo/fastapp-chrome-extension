@@ -1,5 +1,6 @@
 import { Loader2 } from 'lucide-react'
 import { Button as ShadcnButton, ButtonProps as shadcnButtonProps } from '../ui/button'
+// import '../../assets/tailwind.css'
 
 interface Buttonprops extends shadcnButtonProps {
     loading?: boolean

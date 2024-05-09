@@ -1,9 +1,5 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === "getJwt") {
-      chrome.storage.local.get(["jwt"], ({ jwt }) => {
-        sendResponse({ jwt });
-      });
-  
-      return true;
-    }
-  });
+async function init() {
+    console.log('Hello world')
+}
+
+window.addEventListener('load', init, false)

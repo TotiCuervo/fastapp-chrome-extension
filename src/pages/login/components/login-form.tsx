@@ -6,6 +6,7 @@ import Button from '../../../components/buttons/button'
 import { Alert } from '../../../lib/types/alert'
 import Alerter from '../../../components/alerts/alerter'
 import { useUserContext } from '../../../lib/context/UserContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function LoginForm() {
     const { login } = useUserContext()
@@ -13,7 +14,7 @@ export default function LoginForm() {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState<Alert>()
-    // const router = useRouter()
+    const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -21,13 +22,10 @@ export default function LoginForm() {
 
         try {
             await login({ email, password })
-            // if (!response || !response.ok) {
-            //     throw new Error('Invalid credentials')
-            // }
 
             setAlert(undefined)
 
-            // router.push(jsDashboardRoute())
+            navigate('/')
         } catch (error) {
             setAlert({
                 show: true,

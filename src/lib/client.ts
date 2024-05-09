@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import constants from '../constants'
 // import { getSession, signOut } from 'next-auth/react'
 // import { redirect } from 'next/navigation'
 
@@ -10,7 +11,7 @@ type RequestConfigWithRedirect = AxiosRequestConfig & {
 
 const createClient = () =>
     axios.create({
-        baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+        baseURL: `${constants.API_URL}/api`,
         headers: { 'Content-Type': 'application/json' },
         responseType: 'json',
     })
@@ -25,10 +26,9 @@ client.interceptors.request.use(async (config) => {
     })
 
     redirectConfig.redirectOn401 = true
-    const token = null
-
+    const token = await chrome.storage.sync.get(['token'])
     if (token) {
-        config.headers!.Authorization = `Bearer ${token}`
+        config.headers!.Authorization = `Bearer ${token.token}`
     }
 
     return config

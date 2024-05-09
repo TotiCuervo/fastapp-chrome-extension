@@ -2,6 +2,11 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { User } from '../types/user'
 import login, { LoginParams } from '../endpoints/auth/login'
+import getCurrentUser from '../endpoints/users/get-current-user'
+import useUserEducationQuery from '../query/education/useUserEducationQuery'
+import useUserExperienceQuery from '../query/experience/useUserExperienceQuery'
+import Education from '../types/education/education'
+import Experience from '../types/experience/experience'
 
 // Define the shape of the context value
 interface UserContextValue {
@@ -9,6 +14,8 @@ interface UserContextValue {
     setUser: (user: User | null) => void
     loading: boolean
     login: (props: LoginParams) => void
+    educations: Education[]
+    experiences: Experience[]
 }
 
 // Create the initial context value
@@ -17,6 +24,8 @@ const initialUserContextValue: UserContextValue = {
     setUser: () => {},
     loading: true,
     login: () => {},
+    educations: [],
+    experiences: [],
 }
 
 // Create the context
@@ -27,28 +36,63 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
-    // useEffect(() => {
-    //     setLoading(true)
-    //     if (!session || !session.user) {
-    //         setUser(null)
-    //         return
-    //     }
-    //     setUser(session.user)
-    // }, [session])
+    const { data: educations = [] } = useUserEducationQuery({ userId: user?.id })
+    const { data: experiences = [] } = useUserExperienceQuery({ userId: user?.id })
 
     useEffect(() => {
-        setTimeout(() => {
+        getUser()
+    }, [])
+
+    useEffect(() => {
+        async function setData() {
+            await chrome.storage.sync.set({ educations })
+        }
+
+        setData()
+    }, [educations])
+
+    useEffect(() => {
+        async function setData() {
+            await chrome.storage.sync.set({ experiences })
+        }
+
+        setData()
+    }, [experiences])
+
+    async function getUser() {
+        const storage = await chrome.storage.sync.get(['token'])
+        const { token } = storage
+
+        setLoading(true)
+
+        if (!token) {
             setLoading(false)
-        }, 1000)
-    }, [user])
+            return
+        }
+
+        try {
+            const res = await getCurrentUser()
+            const { data } = res.data
+            setUser(data)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     async function handleLogin(props: LoginParams) {
-        const res = await login(props)
-        console.log({ res })
+        const { data } = await login(props)
+
+        const { token, user } = data
+
+        await chrome.storage.sync.set({ token })
+
+        setUser(user)
     }
 
     return (
-        <UserContext.Provider value={{ user, setUser, loading, login: handleLogin }}>{children}</UserContext.Provider>
+        <UserContext.Provider value={{ user, setUser, loading, login: handleLogin, experiences, educations }}>
+            {children}
+        </UserContext.Provider>
     )
 }
 

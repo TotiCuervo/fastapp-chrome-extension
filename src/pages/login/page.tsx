@@ -1,12 +1,29 @@
-import React from 'react'
+import { useUserContext } from '../../lib/context/UserContext'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/ui/card'
 import LoginForm from './components/login-form'
+import { useNavigate } from 'react-router-dom'
+import { LoaderCircle } from 'lucide-react'
 
 export default function Page() {
+    const { user, loading } = useUserContext()
+    const navigate = useNavigate()
+    console.log({ user })
     function signup() {
         chrome.tabs.create({
             url: 'http://localhost:3000/login',
         })
+    }
+
+    if (user) {
+        navigate('/')
+    }
+
+    if (loading) {
+        return (
+            <div className="flex h-full w-full items-center justify-center">
+                <LoaderCircle className="text-primary h-10 w-10 animate-spin" />
+            </div>
+        )
     }
 
     return (
