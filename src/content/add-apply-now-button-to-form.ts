@@ -1,11 +1,16 @@
 import checkIfGreenhouse from './helpers/job-boards/greenhouse/check-if-greenhouse'
 import addApplyButtonToGreenhouse from './helpers/job-boards/greenhouse/add-apply-button-to-greenhouse'
+import addFastappFloater from './helpers/job-boards/add-fastapp-floater'
 
 const options = [
     {
         checker: checkIfGreenhouse,
-        action: addApplyButtonToGreenhouse,
-    },
+        action: addApplyButtonToGreenhouse
+    }
+    // {
+    //     checker: checkIfGreenhouse,
+    //     action: addFastappFloater
+    // }
 ]
 
 async function init() {

@@ -1,6 +1,5 @@
 import { Loader2 } from 'lucide-react'
 import { Button as ShadcnButton, ButtonProps as shadcnButtonProps } from '../ui/button'
-// import '../../assets/tailwind.css'
 
 interface Buttonprops extends shadcnButtonProps {
     loading?: boolean
@@ -11,10 +10,7 @@ export default function Button({ loading, loadingText, children, ...props }: But
     const isDisabled = props.disabled || loading
 
     return (
-        <ShadcnButton
-            {...props}
-            disabled={isDisabled}
-        >
+        <ShadcnButton {...props} disabled={isDisabled}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {loading ? loadingText : children}
         </ShadcnButton>
