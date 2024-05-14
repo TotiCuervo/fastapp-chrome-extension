@@ -7,6 +7,7 @@ import useUserEducationQuery from '../query/education/useUserEducationQuery'
 import useUserExperienceQuery from '../query/experience/useUserExperienceQuery'
 import Education from '../types/education/education'
 import Experience from '../types/experience/experience'
+import usePortfoliosQuery from '../query/portfolios/usePortfoliosQuery'
 
 // Define the shape of the context value
 interface UserContextValue {
@@ -38,6 +39,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     const { data: educations = [] } = useUserEducationQuery({ userId: user?.id })
     const { data: experiences = [] } = useUserExperienceQuery({ userId: user?.id })
+    const { data: portfolios = [] } = usePortfoliosQuery()
 
     useEffect(() => {
         getUser()
@@ -58,6 +60,15 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
         setData()
     }, [experiences])
+
+    useEffect(() => {
+        async function setData() {
+            await chrome.storage.sync.set({ portfolios })
+            await chrome.storage.sync.set({ currentPortfolio: portfolios[0] })
+        }
+
+        setData()
+    }, [portfolios])
 
     async function getUser() {
         const storage = await chrome.storage.sync.get(['token'])

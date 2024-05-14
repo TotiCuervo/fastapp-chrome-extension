@@ -5,12 +5,8 @@ import addFastappFloater from './helpers/job-boards/add-fastapp-floater'
 const options = [
     {
         checker: checkIfGreenhouse,
-        action: addApplyButtonToGreenhouse
-    }
-    // {
-    //     checker: checkIfGreenhouse,
-    //     action: addFastappFloater
-    // }
+        action: addApplyButtonToGreenhouse,
+    },
 ]
 
 async function init() {

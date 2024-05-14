@@ -27,37 +27,38 @@ const DataRender = ({ item }: { item: TotalData }) => {
 }
 
 export default function DashboardPage() {
-    const { user } = useUserContext()
-    const { data: userEducation = [] } = useUserEducationQuery({ userId: 1 })
-    const { data: userExperience = [] } = useUserExperienceQuery({ userId: 1 })
+    // const { user } = useUserContext()
+    // const { data: userEducation = [] } = useUserEducationQuery({ userId: 1 })
+    // const { data: userExperience = [] } = useUserExperienceQuery({ userId: 1 })
 
-    const setType = (item: TotalData['object']) => {
-        //@ts-ignore
-        if (userEducation.includes(item)) {
-            return 'education'
-        }
-        return 'experience'
-    }
+    // const setType = (item: TotalData['object']) => {
+    //     //@ts-ignore
+    //     if (userEducation.includes(item)) {
+    //         return 'education'
+    //     }
+    //     return 'experience'
+    // }
 
-    const totalData: TotalData[] = [...userEducation, ...userExperience, ...userExperience, ...userExperience]
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .map((item) => ({ type: setType(item), object: item }))
+    // const totalData: TotalData[] = [...userEducation, ...userExperience, ...userExperience, ...userExperience]
+    //     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    //     .map((item) => ({ type: setType(item), object: item }))
 
-    const [item, setItem] = useState<TotalData | null>(null)
+    // const [item, setItem] = useState<TotalData | null>(null)
 
     return (
-        <div className="flex h-full w-full">
-            <div className="flex h-full w-5/12 flex-col space-y-2 overflow-y-hidden border-r p-2 transition hover:overflow-y-auto">
-                {totalData.map((item, index) => (
-                    <div onClick={() => setItem(item)}>
-                        <DataRender
-                            key={index}
-                            item={item}
-                        />
-                    </div>
-                ))}
-            </div>
-            <div className="w-7/12">{item ? <ItemDisplay item={item} /> : <div>Click on an item to view</div>}</div>
-        </div>
+        <div>Hello World</div>
+        // <div className="flex h-full w-full">
+        //     <div className="flex h-full w-5/12 flex-col space-y-2 overflow-y-hidden border-r p-2 transition hover:overflow-y-auto">
+        //         {totalData.map((item, index) => (
+        //             <div onClick={() => setItem(item)}>
+        //                 <DataRender
+        //                     key={index}
+        //                     item={item}
+        //                 />
+        //             </div>
+        //         ))}
+        //     </div>
+        //     <div className="w-7/12">{item ? <ItemDisplay item={item} /> : <div>Click on an item to view</div>}</div>
+        // </div>
     )
 }
