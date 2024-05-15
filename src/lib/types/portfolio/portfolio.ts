@@ -1,6 +1,7 @@
 import Education from '../education/education'
 import Experience from '../experience/experience'
 import Skill from '../skills/skill'
+import { User } from '../user'
 
 export default interface Portfolio {
     id: number
@@ -11,4 +12,5 @@ export default interface Portfolio {
     education: Education[]
     skills: Skill[]
     experience: Experience[]
+    user: User
 }

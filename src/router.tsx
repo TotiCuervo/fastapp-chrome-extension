@@ -6,18 +6,13 @@ import DashboardPage from './pages/dashboard/page'
 
 export default function Router() {
     const { user } = useUserContext()
-    console.log('hit!')
     return (
         <HashRouter>
             <Routes>
-                <Route
-                    path="/login"
-                    element={<LoginPage />}
-                />
-                <Route
-                    path="/"
-                    element={<DashboardPage />}
-                />
+                <Route path="/" element={user != null ? <Outlet /> : <Navigate to="/login" />}>
+                    <Route path="/" element={<DashboardPage />} />
+                </Route>
+                <Route path="/login" element={<LoginPage />} />
             </Routes>
         </HashRouter>
     )

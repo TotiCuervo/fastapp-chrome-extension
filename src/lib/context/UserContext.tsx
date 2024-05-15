@@ -26,7 +26,7 @@ const initialUserContextValue: UserContextValue = {
     loading: true,
     login: () => {},
     educations: [],
-    experiences: [],
+    experiences: []
 }
 
 // Create the context
@@ -84,6 +84,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         try {
             const res = await getCurrentUser()
             const { data } = res.data
+            await chrome.storage.sync.set({ user: data })
             setUser(data)
         } finally {
             setLoading(false)
@@ -96,7 +97,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         const { token, user } = data
 
         await chrome.storage.sync.set({ token })
-
+        await chrome.storage.sync.set({ user })
         setUser(user)
     }
 
