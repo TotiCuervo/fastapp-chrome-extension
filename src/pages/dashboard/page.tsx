@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUserContext } from '../../lib/context/UserContext'
 import useUserEducationQuery from '../../lib/query/education/useUserEducationQuery'
 import useUserExperienceQuery from '../../lib/query/experience/useUserExperienceQuery'
@@ -8,11 +8,17 @@ import ItemDisplay from './components/item-display'
 import TotalData from './total-data'
 import { Input } from '../../../src/components/ui/input'
 import Button from '../../../src/components/buttons/button'
-import { Sparkles } from 'lucide-react'
+import { Pointer, Sparkles } from 'lucide-react'
 import SelectInput, { SelectOption } from '../../../src/components/select/select-input'
 import usePortfoliosQuery from '../../../src/lib/query/portfolios/usePortfoliosQuery'
+import { twMerge } from 'tailwind-merge'
 
-const DataRender = ({ item }: { item: TotalData }) => {
+interface LastItem {
+    id: number
+    type: 'education' | 'experience'
+}
+
+const DataRender = ({ item, selected }: { item: TotalData; selected: boolean }) => {
     let title = ''
 
     if (item.type === 'education') {
@@ -22,7 +28,12 @@ const DataRender = ({ item }: { item: TotalData }) => {
     }
 
     return (
-        <div className="cursor-pointer flex-nowrap rounded-lg border border-transparent px-2 py-1 shadow hover:border-border hover:bg-card">
+        <div
+            className={twMerge(
+                'cursor-pointer flex-nowrap rounded-lg border border-transparent px-2 py-1 shadow',
+                selected ? 'bg-card' : 'hover:border-border hover:bg-card'
+            )}
+        >
             <h1 className="truncate text-nowrap">{title}</h1>
             <p className="truncate text-nowrap text-sm text-foreground/70">
                 {item.type[0].toUpperCase() + item.type.slice(1)}
@@ -33,13 +44,40 @@ const DataRender = ({ item }: { item: TotalData }) => {
 
 export default function DashboardPage() {
     const { user } = useUserContext()
-    const { data: userEducation = [] } = useUserEducationQuery({ userId: user?.id })
-    const { data: userExperience = [] } = useUserExperienceQuery({ userId: user?.id })
+    const { data: userEducation = [], isLoading: educationLoading } = useUserEducationQuery({ userId: user?.id })
+    const { data: userExperience = [], isLoading: experienceLoading } = useUserExperienceQuery({ userId: user?.id })
     const { data: portfolios = [] } = usePortfoliosQuery()
 
     const [item, setItem] = useState<TotalData | null>(null)
     const [filter, setFilter] = useState('All Items')
     const [searchText, setSearchText] = useState('')
+
+    useEffect(() => {
+        if (!educationLoading && !experienceLoading && item !== null) return
+
+        const fetchLastItem = async () => {
+            const { lastItem } = await chrome.storage.sync.get(['lastItem'])
+
+            if (!lastItem) return
+
+            const { id, type } = lastItem as LastItem
+
+            if (type === 'education') {
+                const item = userEducation.find((education) => education.id === id)
+                if (item) setItem({ type: 'education', object: item })
+            } else {
+                const item = userExperience.find((experience) => experience.id === id)
+                if (item) setItem({ type: 'experience', object: item })
+            }
+        }
+
+        fetchLastItem()
+    }, [educationLoading, experienceLoading])
+
+    function handleSetItem(item: TotalData) {
+        setItem(item)
+        chrome.storage.sync.set({ lastItem: { id: item.object.id, type: item.type } })
+    }
 
     const setType = (item: TotalData['object']) => {
         //@ts-ignore
@@ -66,7 +104,7 @@ export default function DashboardPage() {
         }
     ]
 
-    const totalData: TotalData[] = flatten([...userEducation, ...userExperience, ...userExperience, ...userExperience])
+    const totalData: TotalData[] = flatten([...userEducation, ...userExperience])
 
     const filteredData = () => {
         let data = totalData
@@ -84,7 +122,12 @@ export default function DashboardPage() {
 
         return data.filter((item) => {
             const values = Object.values(item.object).map((value) => value?.toString().toLowerCase())
-            return values.some((value) => value.includes(searchText.toLowerCase()))
+            return values.some((value) => {
+                if (value) {
+                    return value.includes(searchText.toLowerCase())
+                }
+                return false
+            })
         })
     }
 
@@ -105,13 +148,26 @@ export default function DashboardPage() {
             <div className="flex grow overflow-y-hidden">
                 <div className="flex w-5/12 flex-col space-y-2 overflow-y-hidden border-r p-2 transition hover:overflow-y-auto">
                     <SelectInput options={options} value={filter} onChange={setFilter} />
-                    {filteredData().map((item, index) => (
-                        <div onClick={() => setItem(item)}>
-                            <DataRender key={index} item={item} />
+                    {filteredData().map((filteredItem, index) => (
+                        <div onClick={() => handleSetItem(filteredItem)}>
+                            <DataRender
+                                key={index}
+                                item={filteredItem}
+                                selected={item?.object.id === filteredItem.object.id}
+                            />
                         </div>
                     ))}
                 </div>
-                <div className="w-7/12">{item ? <ItemDisplay item={item} /> : <div>Click on an item to view</div>}</div>
+                <div className="w-7/12 overflow-y-auto">
+                    {item ? (
+                        <ItemDisplay item={item} />
+                    ) : (
+                        <div className="flex h-full w-full items-center justify-center gap-2">
+                            <Pointer size={28} />
+                            <p className="text-lg font-bold">Click on an item</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )
