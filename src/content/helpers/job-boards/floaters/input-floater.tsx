@@ -9,7 +9,6 @@ interface IProps {
 export default function InputFloater({ input }: IProps) {
     const [divWidth, setDivWidth] = useState(0)
 
-    const inputPaddingLeft = window.getComputedStyle(input).getPropertyValue('padding-left')
     const inputPaddingRight = window.getComputedStyle(input).getPropertyValue('padding-right')
     const inputPaddingTop = window.getComputedStyle(input).getPropertyValue('padding-top')
     const inputPaddingBottom = window.getComputedStyle(input).getPropertyValue('padding-bottom')
@@ -38,6 +37,7 @@ export default function InputFloater({ input }: IProps) {
         removeInputFloater()
     }
 
+    window.addEventListener('scroll', handleBlur)
     input.addEventListener('blur', handleBlur)
 
     return (
