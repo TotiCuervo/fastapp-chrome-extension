@@ -24,9 +24,9 @@
         --input: 240 5.9% 90%;
         --ring: 346.8 77.2% 49.8%;
         --radius: 0.5rem;
-    }
-
-    .dark {
+      }
+      
+      .dark {
         --background: 20 14.3% 4.1%;
         --foreground: 0 0% 95%;
         --card: 24 9.8% 10%;
@@ -46,7 +46,7 @@
         --border: 240 3.7% 15.9%;
         --input: 240 3.7% 15.9%;
         --ring: 1 67% 40%;
-    }
+      }
 }
 
 @layer base {

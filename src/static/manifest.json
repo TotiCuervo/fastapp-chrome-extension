@@ -3,8 +3,8 @@
     "manifest_version": 3,
     "name": "Fastapp Chrome Extension",
     "action": {
-        "default_popup": "js/index.html",
-        "default_title": "React Chrome Extension"
+        "default_popup": "index.html",
+        "default_title": "Fastapp Chrome Extension"
     },
     "background": {
         "service_worker": "js/background.js"
@@ -18,7 +18,7 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["assets/index.css", "assets/tailwind.css", "assets/logo.png"],
+            "resources": ["assets/index.css", "assets/tailwind.css", "assets/logo.png", "assets/secondary-logo.png"],
             "matches": ["<all_urls>"]
         }
     ],

@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom'
 interface InjectElementProps {
     container: HTMLDivElement
     element: JSX.Element
+    id?: string
 }
 
-export default function injectElement({ container, element }: InjectElementProps) {
+export default function injectElement({ container, element, id }: InjectElementProps) {
     // Create a shadow root
     const shadowRoot = container.attachShadow({ mode: 'open' })
 
@@ -64,13 +65,9 @@ export default function injectElement({ container, element }: InjectElementProps
     styleLink1.href = chrome.runtime.getURL('assets/tailwind.css')
     shadowRoot.appendChild(styleLink1)
 
-    const styleLink2 = document.createElement('link')
-    styleLink2.rel = 'stylesheet'
-    styleLink2.href = chrome.runtime.getURL('assets/index.css')
-    shadowRoot.appendChild(styleLink2)
-
     // Create a div to serve as the root for React
     const reactRoot = document.createElement('div')
+
     shadowRoot.appendChild(reactRoot)
 
     // Render your Button component inside the new container
