@@ -31,7 +31,7 @@ const DataRender = ({ item, selected }: { item: TotalData; selected: boolean }) 
         <div
             className={twMerge(
                 'cursor-pointer flex-nowrap rounded-lg border border-transparent px-2 py-1 shadow',
-                selected ? 'bg-card' : 'hover:border-border hover:bg-card'
+                selected ? 'bg-muted' : 'hover:border-border hover:bg-card'
             )}
         >
             <h1 className="truncate text-nowrap">{title}</h1>

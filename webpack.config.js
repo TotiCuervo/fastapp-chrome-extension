@@ -51,7 +51,9 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 { from: path.resolve('src/static'), to: path.resolve('dist') },
-                { from: path.resolve('src/assets/logo.png'), to: path.resolve('dist/assets/logo.png') }
+                { from: path.resolve('src/assets/logo.png'), to: path.resolve('dist/assets/logo.png') },
+                { from: path.resolve('src/assets/secondary-logo.png'), to: path.resolve('dist/assets/secondary-logo.png') }
+
             ],
         }),
         ...getHtmlPlugins(['index']),

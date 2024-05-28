@@ -70,9 +70,7 @@ export default function ItemDisplay({ item }: IProps) {
                 <div className="pr-2">{getIcon()}</div>
                 <p className="text-sm text-foreground/70">{getType()}</p>
             </div>
-            <CT className="text-2xl font-bold" leftDistance={7.5}>
-                {getHeader()}
-            </CT>
+            <CT className="text-2xl font-bold">{getHeader()}</CT>
 
             <div className="space-y-3 pt-8">
                 {getCopy().map((item, index) => (
