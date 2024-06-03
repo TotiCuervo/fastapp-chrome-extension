@@ -1,5 +1,10 @@
 const constants = {
-    API_URL: 'http://0.0.0.0:80',
+    dev: {
+        API_URL: 'http://0.0.0.0:80',
+        SIGNUP_URL: 'http://localhost:3000/login'
+    }
 }
 
-export default constants
+const env = 'dev'
+
+export default constants[env]
