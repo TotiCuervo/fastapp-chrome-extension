@@ -13,7 +13,7 @@ const createClient = () =>
     axios.create({
         baseURL: `${constants.API_URL}/api`,
         headers: { 'Content-Type': 'application/json' },
-        responseType: 'json',
+        responseType: 'json'
     })
 
 const client = createClient()

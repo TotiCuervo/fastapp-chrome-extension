@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import LoginForm from './components/login-form'
 import { useNavigate } from 'react-router-dom'
 import { LoaderCircle } from 'lucide-react'
+import constants from '../../../src/constants'
 
 export default function Page() {
     const { user, loading } = useUserContext()
@@ -10,7 +11,7 @@ export default function Page() {
 
     function signup() {
         chrome.tabs.create({
-            url: 'http://localhost:3000/login'
+            url: constants.SIGNUP_URL
         })
     }
 

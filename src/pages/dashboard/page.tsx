@@ -12,6 +12,7 @@ import { Pointer, Sparkles } from 'lucide-react'
 import SelectInput, { SelectOption } from '../../../src/components/select/select-input'
 import usePortfoliosQuery from '../../../src/lib/query/portfolios/usePortfoliosQuery'
 import { twMerge } from 'tailwind-merge'
+import { useNavigate } from 'react-router-dom'
 
 interface LastItem {
     id: number
@@ -43,6 +44,7 @@ const DataRender = ({ item, selected }: { item: TotalData; selected: boolean }) 
 }
 
 export default function DashboardPage() {
+    const navigate = useNavigate()
     const { user } = useUserContext()
     const { data: userEducation = [], isLoading: educationLoading } = useUserEducationQuery({ userId: user?.id })
     const { data: userExperience = [], isLoading: experienceLoading } = useUserExperienceQuery({ userId: user?.id })
@@ -137,7 +139,7 @@ export default function DashboardPage() {
                 <div className="flex grow">
                     <Input className="h-9" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
                 </div>
-                <Button size="sm">
+                <Button size="sm" onClick={() => navigate('/wizard')}>
                     <div className="pr-1">
                         <Sparkles size={16} />
                     </div>
