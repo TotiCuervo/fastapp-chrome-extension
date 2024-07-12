@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import removeInputFloater from './helpers/remove-input-floater'
+import removeInputFloater from './helpers/input-floater/remove-input-floater'
 
 interface IProps {
     input: HTMLInputElement

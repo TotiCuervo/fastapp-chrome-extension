@@ -1,7 +1,7 @@
-import Education from '../../../../lib/types/education/education'
-import Experience from '../../../../lib/types/experience/experience'
-import Portfolio from '../../../../lib/types/portfolio/portfolio'
-import { User } from '../../../../lib/types/user'
+import Education from '../../../types/education/education'
+import Experience from '../../../types/experience/experience'
+import Portfolio from '../../../types/portfolio/portfolio'
+import { User } from '../../../types/user'
 
 export default async function applyWithGreenhouse() {
     const applicationForm = document.getElementById('application_form') as HTMLFormElement
@@ -19,8 +19,6 @@ export default async function applyWithGreenhouse() {
         currentPortfolio: Portfolio
         user: User
     }
-
-    console.log({ data })
 
     const firstNameInput = applicationForm.querySelector('#first_name') as HTMLInputElement
     firstNameInput.value = currentPortfolio.user.firstName

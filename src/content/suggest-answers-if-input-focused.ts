@@ -1,17 +1,20 @@
 import checkIfPageIsJobApplication from './check-if-page-is-job-application'
-import addInputFloater from './helpers/job-boards/floaters/helpers/add-input-floater'
+import addInputFloaterOptions from '../lib/helpers/job-boards/floaters/helpers/input-floater-options/add-input-floater-options'
 
 function init() {
     if (!checkIfPageIsJobApplication()) {
         return
     }
-    const inputs = document.querySelectorAll('input, textarea')
+
+    const inputs = document.querySelectorAll('input[type="text"], textarea')
+
     inputs.forEach((input) => {
         input.addEventListener('focus', handleFocus)
+        input.addEventListener('click', handleFocus)
     })
 
     function handleFocus(event: Event) {
-        addInputFloater(event.target)
+        addInputFloaterOptions(event.target)
     }
 }
 
