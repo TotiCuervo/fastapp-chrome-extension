@@ -1,6 +1,6 @@
-import checkIfGreenhouse from './helpers/job-boards/greenhouse/check-if-greenhouse'
-import addApplyButtonToGreenhouse from './helpers/job-boards/greenhouse/add-apply-button-to-greenhouse'
-import addFastappFloater from './helpers/job-boards/floaters/helpers/add-fastapp-floater'
+import checkIfGreenhouse from '../lib/helpers/job-boards/greenhouse/check-if-greenhouse'
+import addApplyButtonToGreenhouse from '../lib/helpers/job-boards/greenhouse/add-apply-button-to-greenhouse'
+import addFastappFloater from '../lib/helpers/job-boards/floaters/helpers/add-fastapp-floater'
 import checkIfPageIsJobApplication from './check-if-page-is-job-application'
 
 const options = [

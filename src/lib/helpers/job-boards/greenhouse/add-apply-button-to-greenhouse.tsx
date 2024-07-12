@@ -9,6 +9,6 @@ export default function addApplyButtonToGreenhouse() {
     injectBeforeElement({
         injectAfter: contentDiv,
         injectBefore: applicationDiv,
-        element: <ApplyWithFastAppBanner onClick={applyWithGreenhouse} />,
+        element: <ApplyWithFastAppBanner onClick={applyWithGreenhouse} />
     })
 }

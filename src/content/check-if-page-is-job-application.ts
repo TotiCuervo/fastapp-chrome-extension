@@ -18,6 +18,5 @@ export default function checkIfPageIsJobApplication() {
 
     const required = hasForm
     const optional = hasApplicationKeywords || hasFormLabels
-    console.log({ hasForm, hasApplicationKeywords, hasFormLabels, required, optional })
     return required && optional
 }
