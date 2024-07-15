@@ -81,16 +81,6 @@ export default function Floater() {
                             alt="FastApp Logo!"
                             className={'h-10 w-auto'}
                         />
-                        {/* <img
-                            src={chrome.runtime.getURL('assets/secondary-logo.png')}
-                            alt="FastApp Logo!"
-                            className={twMerge('h-10 w-auto', active ? 'visible' : 'invisible')}
-                        />
-                        <img
-                            src={chrome.runtime.getURL('assets/logo.png')}
-                            alt="FastApp Logo!"
-                            className={twMerge('absolute left-3 top-4 h-10 w-auto', !active ? 'visible' : 'invisible')}
-                        /> */}
                     </div>
                     <div
                         className={twMerge(
