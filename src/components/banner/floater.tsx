@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { EllipsisVertical } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
+import { Switch } from '../ui/switch'
 
 export default function Floater() {
     const floaterRef = useRef(null)
@@ -8,12 +9,20 @@ export default function Floater() {
     const [startY, setStartY] = useState(0)
     const [currentTop, setCurrentTop] = useState(293)
     const [loading, setLoading] = useState(true)
+    const [active, setActive] = useState(false)
 
     useEffect(() => {
-        chrome.storage.sync.get(['floaterTop'], (result) => {
+        chrome.storage.sync.get(['floaterTop', 'floaterActive'], (result) => {
             if (result.floaterTop) {
                 setCurrentTop(result.floaterTop)
             }
+
+            if (result.floaterActive !== undefined) {
+                setActive(result.floaterActive)
+            } else {
+                chrome.storage.sync.set({ floaterActive: true })
+            }
+
             setLoading(false)
         })
     }, [])
@@ -57,23 +66,52 @@ export default function Floater() {
         <div
             id="fastapp-floater"
             ref={floaterRef}
-            className="group fixed right-0 cursor-pointer rounded-l-md font-sans shadow-md"
+            className="border-primary-light group fixed right-0 cursor-pointer rounded-l-md border font-sans shadow-md"
             style={{ top: `${currentTop}px`, zIndex: 9999 }}
         >
             <div className="flex">
-                <div className="flex items-center justify-center rounded-l-md bg-primary px-3 py-4">
-                    <img
-                        src={chrome.runtime.getURL('assets/secondary-logo.png')}
-                        alt="FastApp Logo!"
-                        className="h-10 w-auto"
-                    />
+                <div className={twMerge('flex transition', active ? 'bg-primary' : 'bg-primary/70')}>
+                    <div
+                        className={twMerge(
+                            'relative z-20 flex items-center justify-center rounded-l-md px-3 py-4 transition'
+                        )}
+                    >
+                        <img
+                            src={chrome.runtime.getURL('assets/secondary-logo.png')}
+                            alt="FastApp Logo!"
+                            className={'h-10 w-auto'}
+                        />
+                        {/* <img
+                            src={chrome.runtime.getURL('assets/secondary-logo.png')}
+                            alt="FastApp Logo!"
+                            className={twMerge('h-10 w-auto', active ? 'visible' : 'invisible')}
+                        />
+                        <img
+                            src={chrome.runtime.getURL('assets/logo.png')}
+                            alt="FastApp Logo!"
+                            className={twMerge('absolute left-3 top-4 h-10 w-auto', !active ? 'visible' : 'invisible')}
+                        /> */}
+                    </div>
+                    <div
+                        className={twMerge(
+                            'z-10 flex w-0 items-center justify-center transition delay-75 group-hover:w-16'
+                        )}
+                    >
+                        <Switch
+                            className="invisible w-0 group-hover:visible group-hover:w-11 data-[state=checked]:bg-green-500"
+                            checked={active}
+                            onCheckedChange={() => {
+                                setActive((prevActive) => !prevActive)
+                                chrome.storage.sync.set({ floaterActive: !active })
+                            }}
+                        />
+                    </div>
                 </div>
                 <div
                     className={twMerge(
-                        'flex w-0 cursor-grab items-center justify-center transition group-hover:w-8',
+                        'bg-primary-light flex w-0 cursor-grab items-center justify-center transition group-hover:w-8',
                         isDragging && 'w-8'
                     )}
-                    style={{ backgroundColor: 'rgb(229, 83, 83)' }}
                     onMouseDown={handleMouseDown}
                 >
                     <EllipsisVertical className="text-white" size={24} />

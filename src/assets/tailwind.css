@@ -65,3 +65,11 @@
 .hovered-bg {
     @apply hover:bg-muted/70 transition;
 }
+
+.bg-primary-light {
+    background-color: rgb(229, 83, 83);
+}
+
+.border-primary-light {
+    border-color: rgb(229, 83, 83);
+}
