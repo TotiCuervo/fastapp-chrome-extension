@@ -10,12 +10,14 @@ interface IProps {
 interface State {
     show: boolean
     hovering: boolean
+    active: boolean
 }
 
 export default function InputFloaterOptions({ input }: IProps) {
     const [state, setState] = useState<State>({
         show: false,
-        hovering: false
+        hovering: false,
+        active: true
     })
 
     const divRef = useRef<HTMLDivElement>(null)
@@ -50,11 +52,18 @@ export default function InputFloaterOptions({ input }: IProps) {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setState((prevState) => ({
-                ...prevState,
-                value: 'timer',
-                show: true
-            }))
+            chrome.storage.sync.get(['floaterActive'], (result) => {
+                let active = true
+
+                if (result.floaterActive !== undefined) {
+                    active = result.floaterActive
+                }
+                setState((prevState) => ({
+                    ...prevState,
+                    active,
+                    show: true
+                }))
+            })
         }, 1)
 
         input.addEventListener('blur', handleBlur)
@@ -79,7 +88,7 @@ export default function InputFloaterOptions({ input }: IProps) {
         }))
     }
 
-    if (!state.show) return null
+    if (!state.show || !state.active) return null
 
     return (
         <div
