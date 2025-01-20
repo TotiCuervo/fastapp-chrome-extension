@@ -18,3 +18,71 @@ The on blur is not getting removed BEFORE you are going and doing the removing o
 I am partially doing this by having a useEffect on value, removing the onblur, then removing it
 
 The question now is how to add an on blur and remove it when dealing with hover
+
+July 14th, 2023
+I am working on certain pages not detecting.
+
+Specifically https://consensys.io/open-roles/5853947?gh_jid=5853947 is a good example
+
+check-if-page-is-job-application.ts
+import JobApplicationKeywords from '../lib/consts/job-application-keywords'
+import InputLabelKeywords from '../lib/consts/input-label-keywords'
+import checkIfPageIsOnIgnoreList from './check-if-page-is-on-ignore-list'
+
+export default function checkIfPageIsJobApplication() {
+// Get all text content on the page and convert it to lower case for case-insensitive matching
+const bodyText = document.body.innerText.toLowerCase()
+
+    if (checkIfPageIsOnIgnoreList()) {
+        return false
+    }
+
+    // Check for general keywords indicating a job application
+    const hasApplicationKeywords = JobApplicationKeywords.some((keyword) => bodyText.includes(keyword))
+
+    const hasForm = document.querySelector('form') !== null
+
+    // Check for specific form labels that are commonly used in job applications
+    const formElements = Array.from(document.querySelectorAll('label'))
+    const hasFormLabels = InputLabelKeywords.some((label) =>
+        formElements.some((element) => element.textContent?.toLowerCase().includes(label))
+    )
+
+
+    const required = hasForm
+    const optional = hasApplicationKeywords || hasFormLabels
+    return required && optional
+
+}
+
+and
+
+suggest-answers-if-input-focused.ts
+import checkIfPageIsJobApplication from './check-if-page-is-job-application'
+import addInputFloaterOptions from '../lib/helpers/job-boards/floaters/helpers/input-floater-options/add-input-floater-options'
+
+function init() {
+if (!checkIfPageIsJobApplication()) {
+return
+}
+
+    const inputs = document.querySelectorAll('input[type="text"], textarea')
+
+    inputs.forEach((input) => {
+        input.addEventListener('focus', handleFocus)
+        input.addEventListener('click', handleFocus)
+    })
+
+    console.log({ inputs })
+
+    function handleFocus(event: Event) {
+        addInputFloaterOptions(event.target)
+    }
+
+}
+
+export default function suggestAnswersIfInputFocused() {
+window.addEventListener('load', init, false)
+}
+
+I have added some debounces that you can remove

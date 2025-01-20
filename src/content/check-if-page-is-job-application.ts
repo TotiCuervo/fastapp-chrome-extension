@@ -1,22 +1,67 @@
 import JobApplicationKeywords from '../lib/consts/job-application-keywords'
 import InputLabelKeywords from '../lib/consts/input-label-keywords'
+import checkIfPageIsOnIgnoreList from './check-if-page-is-on-ignore-list'
 
 export default function checkIfPageIsJobApplication() {
-    // Get all text content on the page and convert it to lower case for case-insensitive matching
-    const bodyText = document.body.innerText.toLowerCase()
+    let debounceTimer: ReturnType<typeof setTimeout>
+    let isJobApplicationPage = false // Track state to avoid redundant checks
 
-    // Check for general keywords indicating a job application
-    const hasApplicationKeywords = JobApplicationKeywords.some((keyword) => bodyText.includes(keyword))
+    function evaluatePage() {
+        if (isJobApplicationPage) return true // Skip evaluation if already identified
 
-    const hasForm = document.querySelector('form') !== null
+        const bodyText = document.body.innerText.toLowerCase()
 
-    // Check for specific form labels that are commonly used in job applications
-    const formElements = Array.from(document.querySelectorAll('label'))
-    const hasFormLabels = InputLabelKeywords.some((label) =>
-        formElements.some((element) => element.textContent?.toLowerCase().includes(label))
-    )
+        if (checkIfPageIsOnIgnoreList()) {
+            return false
+        }
 
-    const required = hasForm
-    const optional = hasApplicationKeywords || hasFormLabels
-    return required && optional
+        const hasApplicationKeywords = JobApplicationKeywords.some((keyword) => bodyText.includes(keyword))
+        const hasForm = document.querySelector('form') !== null
+        const hasIframe = document.querySelector('iframe') !== null
+
+        const formElements = Array.from(document.querySelectorAll('label'))
+        const hasFormLabels = InputLabelKeywords.some((label) =>
+            formElements.some((element) => element.textContent?.toLowerCase().includes(label))
+        )
+
+        const required = hasForm || hasIframe
+        const optional = hasApplicationKeywords || hasFormLabels
+
+        const isJobApp = required && optional
+
+        console.log({
+            bodyText,
+            hasApplicationKeywords,
+            hasForm,
+            hasIframe,
+            hasFormLabels
+        })
+
+        if (isJobApp) {
+            isJobApplicationPage = true // Set state to true
+        }
+
+        return isJobApp
+    }
+
+    // Perform initial evaluation
+    if (evaluatePage()) {
+        console.log('Initial check: Page identified as job application')
+        return true
+    }
+
+    // Set up DOM monitoring for dynamic content changes
+    const observer = new MutationObserver(() => {
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(() => {
+            if (evaluatePage()) {
+                console.log('MutationObserver: Page identified as job application')
+                observer.disconnect() // Stop observing once identified
+            }
+        }, 100) // Debounce interval
+    })
+
+    observer.observe(document.body, { childList: true, subtree: true })
+
+    return false
 }

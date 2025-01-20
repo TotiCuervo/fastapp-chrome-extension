@@ -1,69 +1,44 @@
-import React from 'react'
-import PromptCombobox from './components/prompt-combobox'
-import Button from '../../components/buttons/button'
-import { Label } from '../../../src/components/ui/label'
-import { Textarea } from '../../../src/components/ui/textarea'
-import { Input } from '../../../src/components/ui/input'
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from '../../../src/components/ui/select'
+import { useState } from 'react'
+import Prompt from '../../../src/lib/types/prompts/prompt'
+import WizardResultDisplay from './components/wizard-result-display'
+import WizardForm from './components/wizard-form'
+import WizardPromptPicker from './components/wizard-prompt-picker'
+import fetchStreamedResponse from '../../lib/fetchStreamedResponse'
+import Portfolio from '../../../src/lib/types/portfolio/portfolio'
 
 export default function Page() {
+    const [selectedPrompt, setSelectedPrompt] = useState<Prompt>()
+    const [streamingResult, setStreamingResult] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const onSubmit = async (formData: Record<string, string>, selectedPortfolio: Portfolio['id']) => {
+        setStreamingResult('') // Clear the previous result
+        await fetchStreamedResponse(
+            `/prompts/${selectedPrompt?.id}/execute`,
+            {
+                ...formData,
+                portfolio_id: selectedPortfolio,
+                stream: true
+            },
+            setLoading,
+            (chunk) => {
+                console.log({ chunk })
+                setStreamingResult((prev) => prev + chunk)
+            }
+        )
+    }
+
     return (
         <div className="flex h-full w-full flex-col">
-            <div className="flex items-center space-x-4 border-b p-5">
-                <p className="font-semibold">Prompt</p>
-                <PromptCombobox />
-                <Button variant="secondary">Save</Button>
+            <div className="flex border-b p-5">
+                <WizardPromptPicker selectedPrompt={selectedPrompt} setSelectedPrompt={setSelectedPrompt} />
             </div>
             <div className="flex flex-1 space-x-4 p-5">
                 <div className="flex w-7/12 flex-col space-y-3">
-                    <div className="flex w-full grow rounded-md border bg-muted p-2"></div>
+                    <WizardResultDisplay streamingResult={streamingResult} />
                 </div>
                 <div className="w-5/12">
-                    <div className="flex h-full w-full flex-col space-y-3 px-2">
-                        <div className="flex grow flex-col space-y-3">
-                            <div className="grid w-full gap-1.5">
-                                <Label htmlFor="firstName">Profile</Label>
-                                <Select>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a profile" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Fruits</SelectLabel>
-                                            <SelectItem value="apple">Apple</SelectItem>
-                                            <SelectItem value="banana">Banana</SelectItem>
-                                            <SelectItem value="blueberry">Blueberry</SelectItem>
-                                            <SelectItem value="grapes">Grapes</SelectItem>
-                                            <SelectItem value="pineapple">Pineapple</SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="grid w-full gap-1.5">
-                                <Label htmlFor="firstName">Question</Label>
-                                <Textarea id="firstName" placeholder="Question" className="min-h-[40px]" />
-                            </div>
-                            <div className="grid w-full gap-1.5">
-                                <Label htmlFor="firstName">Instructions</Label>
-                                <Textarea id="firstName" placeholder="Instructions" className="min-h-[40px]" />
-                            </div>
-                        </div>
-                        <div className="flex flex-col space-y-3">
-                            <div className="grid w-full gap-1.5">
-                                <Label htmlFor="firstName">Feedback</Label>
-                                <Textarea id="firstName" placeholder="Feedback" className="min-h-[40px]" />
-                            </div>
-                            <Button>Submit</Button>
-                        </div>
-                    </div>
+                    <WizardForm selectedPrompt={selectedPrompt} onSubmit={onSubmit} isLoading={loading} />
                 </div>
             </div>
         </div>

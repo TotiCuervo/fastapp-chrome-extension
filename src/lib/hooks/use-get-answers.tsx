@@ -19,11 +19,14 @@ export default function useGetAnswers(input: HTMLInputElement) {
             }
         }
 
+        // Helper function to clean asterisks from values
+        const cleanValue = (value: string) => value.replace(/\*/g, '').trim()
+
         // Check sibling div for potential labels
         const checkSiblingDivs = (input: HTMLInputElement) => {
             const siblingDiv = input.nextElementSibling || input.previousElementSibling
             if (siblingDiv && siblingDiv.tagName.toLowerCase() === 'div' && siblingDiv.textContent?.trim() !== '') {
-                return siblingDiv.textContent?.trim().toLowerCase()
+                return cleanValue(siblingDiv.textContent?.trim().toLowerCase() || '')
             }
             return null
         }
@@ -36,10 +39,10 @@ export default function useGetAnswers(input: HTMLInputElement) {
 
         // Determine the type of information needed
         const determineInfoType = (input: HTMLInputElement) => {
-            const placeholder = input.getAttribute('placeholder')?.toLowerCase() || ''
-            const id = input.getAttribute('id')?.toLowerCase() || ''
-            const className = input.getAttribute('class')?.toLowerCase() || ''
-            const name = input.getAttribute('name')?.toLowerCase() || ''
+            const placeholder = cleanValue(input.getAttribute('placeholder')?.toLowerCase() || '')
+            const id = cleanValue(input.getAttribute('id')?.toLowerCase() || '')
+            const className = cleanValue(input.getAttribute('class')?.toLowerCase() || '')
+            const name = cleanValue(input.getAttribute('name')?.toLowerCase() || '')
             const siblingText = checkSiblingDivs(input) || ''
 
             // Define possible labels and corresponding user info fields
