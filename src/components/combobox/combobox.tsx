@@ -43,10 +43,13 @@ export default function Combobox({ value = null, groups = [], onChange, onSearch
         return [...acc, ...(group.options || [])]
     }, [])
 
-    console.log({ groups })
-
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover
+            open={open}
+            onOpenChange={(open) => {
+                setOpen(open)
+            }}
+        >
             <PopoverTrigger asChild>
                 <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
                     {value

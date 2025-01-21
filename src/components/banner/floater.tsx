@@ -64,7 +64,6 @@ export default function Floater() {
 
     return (
         <div
-            id="fastapp-floater"
             ref={floaterRef}
             className="border-primary-light group fixed right-0 cursor-pointer rounded-l-md border font-sans shadow-md"
             style={{ top: `${currentTop}px`, zIndex: 9999 }}

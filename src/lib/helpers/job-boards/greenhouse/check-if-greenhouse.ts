@@ -1,5 +1,7 @@
+const greenhouseURls = ['https://boards.greenhouse.io', 'https://job-boards.greenhouse.io/']
+
 export default function checkIfGreenhouse() {
-    if (window.location.href.includes('https://boards.greenhouse.io')) {
+    if (greenhouseURls.some((url) => document.URL.includes(url))) {
         return true
     }
 

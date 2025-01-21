@@ -122,6 +122,11 @@ export default function InputFloaterOptions({ input }: IProps) {
                     {suggestion.value}
                 </div>
             ))}
+            {suggestions.length === 0 && (
+                <div>
+                    <p className="text-center">No suggestions found</p>
+                </div>
+            )}
         </div>
     )
 }
