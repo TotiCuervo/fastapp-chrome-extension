@@ -15,6 +15,7 @@ function runUpdates() {
         // iframe
         suggestAnswersIfInputFocused()
         addApplyNowButtonToForm()
+
         // handleSaveJob()
     }
 }

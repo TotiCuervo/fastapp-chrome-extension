@@ -6,7 +6,8 @@ const ignorePages = [
     'instagram.com',
     'twitter.com',
     'x.com',
-    'reddit.com'
+    'reddit.com',
+    'github.com'
 ]
 
 export default function checkIfPageIsOnIgnoreList() {
