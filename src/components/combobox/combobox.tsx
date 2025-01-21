@@ -48,7 +48,6 @@ export default function Combobox({ value = null, groups = [], onChange, onSearch
             open={open}
             onOpenChange={(open) => {
                 setOpen(open)
-                console.log({ open })
             }}
         >
             <PopoverTrigger asChild>

@@ -14,5 +14,6 @@ async function init() {
 }
 
 export default function addApplyNowButtonToForm() {
-    window.addEventListener('load', init, false)
+    init()
+    // window.addEventListener('load', init, false)
 }

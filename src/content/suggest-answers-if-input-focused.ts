@@ -49,5 +49,6 @@ async function init(): Promise<void> {
 }
 
 export default function suggestAnswersIfInputFocused(): void {
-    window.addEventListener('load', init, false)
+    init()
+    // window.addEventListener('load', init, false)
 }

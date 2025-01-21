@@ -8,6 +8,6 @@ export default function addInputFloater(eventTarget: EventTarget | null) {
 
     injectAfterBody({
         element: <InputFloater input={input} />,
-        id: 'fastapp-floater'
+        id: 'fastapp-input-floater'
     })
 }

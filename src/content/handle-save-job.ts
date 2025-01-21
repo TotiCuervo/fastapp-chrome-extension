@@ -1,7 +1,5 @@
 async function init() {
-    console.log('Extracting text...2')
     const text = await stripHtmlBodyContent()
-    console.log({ text })
 }
 
 async function stripHtmlBodyContent(): Promise<string> {
@@ -45,7 +43,6 @@ async function stripHtmlBodyContent(): Promise<string> {
 }
 
 export default function handleSaveJob(): void {
-    console.log('handleSaveJob')
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
         // If the document is already loaded, run init immediately
         init()

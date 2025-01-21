@@ -29,24 +29,16 @@ export default function checkIfPageIsJobApplication() {
 
         const isJobApp = required && optional
 
-        console.log({
-            bodyText,
-            hasApplicationKeywords,
-            hasForm,
-            hasIframe,
-            hasFormLabels
-        })
-
         if (isJobApp) {
             isJobApplicationPage = true // Set state to true
+            return true
         }
 
-        return isJobApp
+        return false
     }
 
     // Perform initial evaluation
     if (evaluatePage()) {
-        console.log('Initial check: Page identified as job application')
         return true
     }
 
@@ -55,7 +47,6 @@ export default function checkIfPageIsJobApplication() {
         clearTimeout(debounceTimer)
         debounceTimer = setTimeout(() => {
             if (evaluatePage()) {
-                console.log('MutationObserver: Page identified as job application')
                 observer.disconnect() // Stop observing once identified
             }
         }, 100) // Debounce interval

@@ -22,7 +22,6 @@ export default function Page() {
             },
             setLoading,
             (chunk) => {
-                console.log({ chunk })
                 setStreamingResult((prev) => prev + chunk)
             }
         )

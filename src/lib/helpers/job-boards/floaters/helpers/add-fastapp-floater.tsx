@@ -5,13 +5,18 @@ import injectAfterBody from '../../../inject/inject-after-body'
 export default function addFastappFloater() {
     const floater = document.getElementById('fastapp-floater')
 
-    if (floater) {
+    const check = checkIfPageIsJobApplication()
+
+    if (floater && !check) {
         floater.remove()
     }
 
-    if (!checkIfPageIsJobApplication()) return
+    if (floater || !check) {
+        return
+    }
 
     injectAfterBody({
-        element: <Floater />
+        element: <Floater />,
+        id: 'fastapp-floater'
     })
 }
