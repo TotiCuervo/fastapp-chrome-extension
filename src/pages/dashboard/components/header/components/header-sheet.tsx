@@ -45,7 +45,7 @@ export default function HeaderSheet() {
     return (
         <Sheet>
             <SheetTrigger className="-mr-1 flex items-center rounded-md px-2 transition hover:bg-accent hover:text-accent-foreground">
-                <div className="flex w-56 flex-nowrap items-center space-x-1">
+                <div className="flex w-56 flex-nowrap items-center space-x-2">
                     <FileText size={24} />
                     <span className="flex truncate text-nowrap">
                         {noPortfolios ? 'No Default Portfolio' : defaultPortfolio?.name || 'Default Portfolio'}
