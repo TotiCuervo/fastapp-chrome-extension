@@ -6,13 +6,11 @@ import Education from '../../lib/types/education/education'
 import Experience from '../../lib/types/experience/experience'
 import ItemDisplay from './components/item-display'
 import TotalData from './total-data'
-import { Input } from '../../../src/components/ui/input'
-import Button from '../../../src/components/buttons/button'
-import { Pointer, Sparkles } from 'lucide-react'
+import { Pointer } from 'lucide-react'
 import SelectInput, { SelectOption } from '../../../src/components/select/select-input'
 import usePortfoliosQuery from '../../../src/lib/query/portfolios/usePortfoliosQuery'
 import { twMerge } from 'tailwind-merge'
-import { useNavigate } from 'react-router-dom'
+import Header from './components/header/header'
 
 interface LastItem {
     id: number
@@ -44,7 +42,6 @@ const DataRender = ({ item, selected }: { item: TotalData; selected: boolean }) 
 }
 
 export default function DashboardPage() {
-    const navigate = useNavigate()
     const { user } = useUserContext()
     const { data: userEducation = [], isLoading: educationLoading } = useUserEducationQuery({ userId: user?.id })
     const { data: userExperience = [], isLoading: experienceLoading } = useUserExperienceQuery({ userId: user?.id })
@@ -135,18 +132,7 @@ export default function DashboardPage() {
 
     return (
         <div className="flex h-full w-full flex-col">
-            <div className="flex w-full gap-4 border-b px-4 py-2">
-                <div className="flex grow">
-                    <Input className="h-9" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-                </div>
-                <Button size="sm" onClick={() => navigate('/wizard')}>
-                    <div className="pr-1">
-                        <Sparkles size={16} />
-                    </div>
-                    Wizard
-                </Button>
-            </div>
-
+            <Header searchText={searchText} setSearchText={setSearchText} />
             <div className="flex grow overflow-y-hidden">
                 <div className="flex w-5/12 flex-col space-y-2 overflow-y-hidden border-r p-2 transition hover:overflow-y-auto">
                     <SelectInput options={options} value={filter} onChange={setFilter} />

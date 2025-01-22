@@ -15,6 +15,7 @@ interface UserContextValue {
     setUser: (user: User | null) => void
     loading: boolean
     login: (props: LoginParams) => void
+    logout: () => void
     educations: Education[]
     experiences: Experience[]
 }
@@ -25,6 +26,7 @@ const initialUserContextValue: UserContextValue = {
     setUser: () => {},
     loading: true,
     login: () => {},
+    logout: () => {},
     educations: [],
     experiences: []
 }
@@ -101,8 +103,20 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         setUser(user)
     }
 
+    async function handleLogout() {
+        await chrome.storage.sync.remove(['token'])
+        await chrome.storage.sync.remove(['user'])
+        await chrome.storage.sync.remove(['educations'])
+        await chrome.storage.sync.remove(['experiences'])
+        await chrome.storage.sync.remove(['portfolios'])
+        await chrome.storage.sync.remove(['defaultPortfolio'])
+        setUser(null)
+    }
+
     return (
-        <UserContext.Provider value={{ user, setUser, loading, login: handleLogin, experiences, educations }}>
+        <UserContext.Provider
+            value={{ user, setUser, loading, login: handleLogin, logout: handleLogout, experiences, educations }}
+        >
             {children}
         </UserContext.Provider>
     )

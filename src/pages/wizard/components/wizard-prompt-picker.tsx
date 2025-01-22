@@ -3,6 +3,8 @@ import usePromptsQuery from '../../../../src/lib/query/prompts/usePromptsQuery'
 import SelectInput from '../../../../src/components/select/select-input'
 import { useEffect } from 'react'
 import Prompt from '../../../../src/lib/types/prompts/prompt'
+import { ArrowLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 interface IProps {
     selectedPrompt?: Prompt
@@ -11,6 +13,7 @@ interface IProps {
 
 export default function WizardPromptPicker({ selectedPrompt, setSelectedPrompt }: IProps) {
     const { data: prompts = [] } = usePromptsQuery()
+    const navigate = useNavigate()
 
     const promptOptions = prompts.map((prompt: Prompt) => prompt.name)
 
@@ -33,12 +36,18 @@ export default function WizardPromptPicker({ selectedPrompt, setSelectedPrompt }
 
     return (
         <div className="flex w-full items-center space-x-4">
-            <p className="font-semibold">Prompt</p>
-            <SelectInput
-                options={[{ items: promptOptions }]}
-                value={selectedPrompt?.name || ''}
-                onChange={handlePromptChange}
-            />
+            <Button variant="outline" onClick={() => navigate(-1)}>
+                <ArrowLeft size={16} />
+                Back
+            </Button>
+            <div className="flex shrink grow items-center space-x-2">
+                <p className="font-semibold">Prompt</p>
+                <SelectInput
+                    options={[{ items: promptOptions }]}
+                    value={selectedPrompt?.name || ''}
+                    onChange={handlePromptChange}
+                />
+            </div>
             <Button variant="secondary">Save</Button>
         </div>
     )
